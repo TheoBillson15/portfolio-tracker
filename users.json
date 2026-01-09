@@ -1,14 +1,14 @@
 {
   "admin": {
-    "password": "a7c8f3d9e1b4...", 
+    "password": "6a1a943569e06041987b07f78e5232500335cefa963cb4630dc2413fe6230504", 
     "role": "admin"
   },
   "theo": {
-    "password": "b91f0e12c4d3...", 
+    "password": "38530b6f851904f7c9be049cddf0088027768fd570251363ca07d5e5115ea794", 
     "role": "user"
   },
   "guest": {
-    "password": "c8e4d1a0f2e9...", 
+    "password": "6b93ccba414ac1d0ae1e77f3fac560c748a6701ed6946735a49d463351518e16", 
     "role": "viewer"
   }
 }
