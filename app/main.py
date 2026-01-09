@@ -1,74 +1,102 @@
-from database import add_position, get_positions
-
 import streamlit as st
-import yfinance as yf
-import plotly.express as px
-import pandas as pd
+from auth import authenticate, get_role
+import streamlit as st
 
-st.title("📈 Portfolio Tracker")
+st.set_page_config(page_title="Portfolio Tracker", page_icon="📈", layout="wide")
 
-ticker = st.text_input("Enter a stock ticker (e.g., AAPL)")
+# -------------------------
+# BEAUTIFUL LOGIN UI
+# -------------------------
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
+    st.session_state.username = None
 
-if ticker:
-    ticker_obj = yf.Ticker(ticker)
-    hist = ticker_obj.history(period="1y")
+if not st.session_state.logged_in:
+    st.markdown(
+        """
+        <style>
+        .login-container {
+            max-width: 380px;
+            margin: 80px auto;
+            padding: 30px;
+            border-radius: 12px;
+            background: #ffffff;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            text-align: center;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .login-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .login-subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 25px;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
-    st.write(hist.tail()) 
+    st.markdown("<div class='login-container'>", unsafe_allow_html=True)
+    st.markdown("<div class='login-title'>📈 Portfolio Tracker</div>", unsafe_allow_html=True)
+    st.markdown("<div class='login-subtitle'>Welcome back — please sign in</div>", unsafe_allow_html=True)
 
-    fig = px.line(hist, x=hist.index, y="Close", title=f"{ticker} Closing Price")
-    st.plotly_chart(fig)
+    username = st.text_input("Username")
+    password = st.text_input("Password", type="password")
 
-
-st.subheader("Add to Portfolio")
-
-qty = st.number_input("Quantity", min_value=0.0)
-price = st.number_input("Purchase Price", min_value=0.0)
-fair_value = st.number_input("DCF Fair Value", min_value=0.0)
-
-if st.button("Add Position"):
-    add_position(ticker, qty, price, fair_value)
-    st.success(f"Added {ticker} to portfolio")
-
-st.subheader("📊 Current Portfolio")
-
-positions = get_positions()
-
-if positions:
-    rows = []
-    for p in positions:
-        current_price = yf.Ticker(p.ticker).info["regularMarketPrice"]
-        value = p.quantity * current_price
-        cost = p.quantity * p.purchase_price
-        gain = value - cost
-        upside = (p.fair_value - current_price) / current_price * 100
-        signal = "BUY" if upside > 10 else "HOLD" if upside > 0 else "SELL"
-
-
-        rows.append({
-            "Ticker": p.ticker,
-            "Quantity": p.quantity,
-            "Purchase Price": p.purchase_price,
-            "Fair Value": p.fair_value,
-            "Current Price": round(current_price, 2),
-            "Value": round(value, 2),
-            "Gain/Loss": round(gain, 2),
-            "Upside (%)": round(upside, 2),
-            "Signal": signal
-        })
-
-    df = pd.DataFrame(rows)
-
-    def highlight_signal(row):
-        if row["Signal"] == "BUY":
-            return ["background-color: lightgreen"] * len(row)
-        elif row["Signal"] == "SELL":
-            return ["background-color: lightcoral"] * len(row)
+    if st.button("Login"):
+        if authenticate(username, password):
+            st.session_state.logged_in = True
+            st.session_state.username = username
+            st.rerun()
         else:
-            return [""] * len(row)
+            st.error("Invalid username or password")
 
-    st.dataframe(df.style.apply(highlight_signal, axis=1))
+    st.markdown("</div>", unsafe_allow_html=True)
+    st.stop()
 
+# -------------------------
+# SIDEBAR (logout + role)
+# -------------------------
+role = get_role(st.session_state.username)
 
-else:
-    st.info("No positions added yet.")
+st.sidebar.title("📁 Navigation")
+st.sidebar.write(f"Logged in as **{st.session_state.username}** ({role})")
 
+if st.sidebar.button("Logout"):
+    st.session_state.logged_in = False
+    st.session_state.username = None
+    st.rerun()
+
+# -------------------------
+# PAGE ROUTING
+# -------------------------
+st.sidebar.write("---")
+
+page = st.sidebar.radio(
+    "Go to:",
+    [
+        "Dashboard",
+        "Add Position",
+        "Portfolio",
+        "Admin Panel" if role == "admin" else None
+    ],
+)
+
+# -------------------------
+# LOAD PAGES
+# -------------------------
+if page == "Dashboard":
+    st.switch_page("pages/1_Dashboard.py")
+
+elif page == "Add Position":
+    st.switch_page("pages/2_Add_Position.py")
+
+elif page == "Portfolio":
+    st.switch_page("pages/3_Portfolio.py")
+
+elif page == "Admin Panel":
+    st.switch_page("pages/4_Admin.py")
