@@ -2,7 +2,7 @@ import streamlit as st
 import yfinance as yf
 import pandas as pd
 import plotly.express as px
-from database import get_positions
+from app.database import get_positions
 
 st.set_page_config(layout="wide")
 

@@ -1,5 +1,5 @@
 import streamlit as st
-from auth import add_user, delete_user, load_users, get_role
+from app.auth import add_user, delete_user, load_users, get_role
 
 st.title("🔧 Admin Panel")
 
