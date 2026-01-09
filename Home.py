@@ -12,6 +12,15 @@ if "username" not in st.session_state:
     st.session_state.username = None
 if "role" not in st.session_state:
     st.session_state.role = None
+if "just_logged_in" not in st.session_state:
+    st.session_state.just_logged_in = False
+
+# -------------------------
+# AUTO-REDIRECT AFTER LOGIN
+# -------------------------
+if st.session_state.logged_in and st.session_state.just_logged_in:
+    st.session_state.just_logged_in = False
+    st.switch_page("pages/1_Dashboard.py")
 
 # -------------------------
 # LOGIN SCREEN
@@ -62,12 +71,10 @@ if not st.session_state.logged_in:
             st.session_state.logged_in = True
             st.session_state.username = username
             st.session_state.role = get_role(username)
+            st.session_state.just_logged_in = True
             st.rerun()
         else:
             st.error("Invalid username or password")
 
     st.markdown("</div>", unsafe_allow_html=True)
     st.stop()
-
-# If logged in, redirect to dashboard
-st.switch_page("pages/1_Dashboard.py")
