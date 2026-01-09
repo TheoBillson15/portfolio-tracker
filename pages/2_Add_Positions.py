@@ -2,6 +2,10 @@ from components.sidebar import render_sidebar
 
 page = render_sidebar()
 
+# If user is not logged in, stop the page from rendering
+if page == "Home":
+    st.stop()
+
 
 import streamlit as st
 from database import add_position

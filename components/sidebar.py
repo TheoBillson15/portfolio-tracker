@@ -2,10 +2,14 @@ import streamlit as st
 from auth import get_role
 
 def render_sidebar():
-    # If not logged in, redirect to Home
+    # If not logged in, show only "Home" and stop
     if "logged_in" not in st.session_state or not st.session_state.logged_in:
-        st.switch_page("Home")
-    
+        st.sidebar.title("📁 Navigation")
+        st.sidebar.write("You are not logged in.")
+        st.sidebar.write("Go to Home to log in.")
+        return "Home"
+
+    # If logged in, show full sidebar
     role = get_role(st.session_state.username)
 
     st.sidebar.title("📁 Navigation")
