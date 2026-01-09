@@ -1,30 +1,41 @@
 import streamlit as st
+from auth import authenticate, get_role
 
-# Initialize session state keys
+st.set_page_config(page_title="Portfolio Tracker", page_icon="📈", layout="wide")
+
+# -------------------------
+# LOGOUT FUNCTION
+# -------------------------
+def logout():
+    """Clear all session state and return to login screen."""
+    st.session_state.clear()
+    st.session_state["logged_out_message"] = True
+    st.rerun()
+
+
+# -------------------------
+# INITIALIZE SESSION STATE
+# -------------------------
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
+
 if "username" not in st.session_state:
     st.session_state.username = None
 
 if "role" not in st.session_state:
     st.session_state.role = None
 
-if "logged_in" not in st.session_state:
-    st.session_state.logged_in = False
-
-
-import streamlit as st
-from auth import authenticate, get_role
-import streamlit as st
-
-st.set_page_config(page_title="Portfolio Tracker", page_icon="📈", layout="wide")
 
 # -------------------------
-# BEAUTIFUL LOGIN UI
+# LOGIN SCREEN
 # -------------------------
-if "logged_in" not in st.session_state:
-    st.session_state.logged_in = False
-    st.session_state.username = None
-
 if not st.session_state.logged_in:
+
+    # Show logout confirmation if triggered
+    if st.session_state.get("logged_out_message"):
+        st.success("You have been logged out.")
+        del st.session_state["logged_out_message"]
+
     st.markdown(
         """
         <style>
@@ -64,6 +75,7 @@ if not st.session_state.logged_in:
         if authenticate(username, password):
             st.session_state.logged_in = True
             st.session_state.username = username
+            st.session_state.role = get_role(username)
             st.rerun()
         else:
             st.error("Invalid username or password")
@@ -71,39 +83,25 @@ if not st.session_state.logged_in:
     st.markdown("</div>", unsafe_allow_html=True)
     st.stop()
 
+
 # -------------------------
 # SIDEBAR (logout + role)
 # -------------------------
 role = get_role(st.session_state.username)
+st.session_state.role = role
 
 st.sidebar.title("📁 Navigation")
 st.sidebar.write(f"Logged in as **{st.session_state.username}** ({role})")
 
 if st.sidebar.button("Logout"):
-    st.session_state.logged_in = False
-    st.session_state.username = None
-    st.session_state.role = None
-    st.experimental_rerun()
+    logout()
 
 st.sidebar.write("---")
-
-page = st.sidebar.radio(
-    "Go to:",
-    [
-        "Dashboard",
-        "Add Position",
-        "Portfolio",
-        "Admin Panel" if role == "admin" else None
-    ],
-)
-
 
 
 # -------------------------
 # PAGE ROUTING
 # -------------------------
-st.sidebar.write("---")
-
 page = st.sidebar.radio(
     "Go to:",
     [
