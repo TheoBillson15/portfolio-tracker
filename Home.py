@@ -4,22 +4,12 @@ from auth import authenticate, get_role
 st.set_page_config(page_title="Portfolio Tracker", page_icon="📈", layout="wide")
 
 # -------------------------
-# LOGOUT FUNCTION
-# -------------------------
-def logout():
-    st.session_state.clear()
-    st.session_state["logged_out_message"] = True
-    st.rerun()
-
-# -------------------------
 # INITIAL SESSION STATE
 # -------------------------
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
-
 if "username" not in st.session_state:
     st.session_state.username = None
-
 if "role" not in st.session_state:
     st.session_state.role = None
 
