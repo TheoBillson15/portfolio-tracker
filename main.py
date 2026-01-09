@@ -1,11 +1,3 @@
-from auth import add_user
-
-print("Running password hashing...")  # helps confirm it runs on Streamlit logs
-
-add_user("admin", "fbi67", "admin")
-add_user("theo", "pineapple342", "user")
-add_user("guest", "guest123", "viewer")
-
 import streamlit as st
 
 # Initialize session state keys
@@ -90,7 +82,22 @@ st.sidebar.write(f"Logged in as **{st.session_state.username}** ({role})")
 if st.sidebar.button("Logout"):
     st.session_state.logged_in = False
     st.session_state.username = None
-    st.rerun()
+    st.session_state.role = None
+    st.experimental_rerun()
+
+st.sidebar.write("---")
+
+page = st.sidebar.radio(
+    "Go to:",
+    [
+        "Dashboard",
+        "Add Position",
+        "Portfolio",
+        "Admin Panel" if role == "admin" else None
+    ],
+)
+
+
 
 # -------------------------
 # PAGE ROUTING
