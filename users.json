@@ -1,15 +1,14 @@
 {
   "admin": {
-    "password": "pineapple342",
+    "password": "fbi67", 
     "role": "admin"
   },
   "theo": {
-    "password": "banana456",
+    "password": "pineapple342", 
     "role": "user"
   },
   "guest": {
-    "password": "guest123",
+    "password": "guest123", 
     "role": "viewer"
   }
 }
-
