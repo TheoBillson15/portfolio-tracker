@@ -85,7 +85,7 @@ if not st.session_state.logged_in:
 
 
 # -------------------------
-# SIDEBAR (logout + role)
+# SIDEBAR (role + navigation)
 # -------------------------
 role = get_role(st.session_state.username)
 st.session_state.role = role
@@ -93,26 +93,28 @@ st.session_state.role = role
 st.sidebar.title("📁 Navigation")
 st.sidebar.write(f"Logged in as **{st.session_state.username}** ({role})")
 
-# Logout button ALWAYS visible now
-if st.sidebar.button("Logout"):
-    logout()
+st.sidebar.write("---")
+
+# Build navigation list safely
+pages = ["Dashboard", "Add Position", "Portfolio"]
+if role == "admin":
+    pages.append("Admin Panel")
+
+# Navigation radio
+page = st.sidebar.radio("Go to:", pages)
 
 st.sidebar.write("---")
+
+# FORCE logout button to bottom of sidebar
+st.sidebar.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
+logout_clicked = st.sidebar.button("🚪 Logout")
+
+if logout_clicked:
+    logout()
 
 
 # -------------------------
 # PAGE ROUTING
-# -------------------------
-pages = ["Dashboard", "Add Position", "Portfolio"]
-
-if role == "admin":
-    pages.append("Admin Panel")
-
-page = st.sidebar.radio("Go to:", pages)
-
-
-# -------------------------
-# LOAD PAGES
 # -------------------------
 if page == "Dashboard":
     st.switch_page("pages/1_Dashboard.py")
