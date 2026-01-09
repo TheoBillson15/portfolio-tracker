@@ -7,6 +7,19 @@ add_user("theo", "pineapple342", "user")
 add_user("guest", "guest123", "viewer")
 
 import streamlit as st
+
+# Initialize session state keys
+if "username" not in st.session_state:
+    st.session_state.username = None
+
+if "role" not in st.session_state:
+    st.session_state.role = None
+
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
+
+
+import streamlit as st
 from auth import authenticate, get_role
 import streamlit as st
 
