@@ -93,6 +93,7 @@ st.session_state.role = role
 st.sidebar.title("📁 Navigation")
 st.sidebar.write(f"Logged in as **{st.session_state.username}** ({role})")
 
+# Logout button ALWAYS visible now
 if st.sidebar.button("Logout"):
     logout()
 
@@ -102,15 +103,13 @@ st.sidebar.write("---")
 # -------------------------
 # PAGE ROUTING
 # -------------------------
-page = st.sidebar.radio(
-    "Go to:",
-    [
-        "Dashboard",
-        "Add Position",
-        "Portfolio",
-        "Admin Panel" if role == "admin" else None
-    ],
-)
+pages = ["Dashboard", "Add Position", "Portfolio"]
+
+if role == "admin":
+    pages.append("Admin Panel")
+
+page = st.sidebar.radio("Go to:", pages)
+
 
 # -------------------------
 # LOAD PAGES
