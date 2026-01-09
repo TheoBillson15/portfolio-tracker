@@ -1,5 +1,5 @@
 import streamlit as st
-from app.auth import authenticate, get_role
+from auth import authenticate, get_role
 import streamlit as st
 
 st.set_page_config(page_title="Portfolio Tracker", page_icon="📈", layout="wide")

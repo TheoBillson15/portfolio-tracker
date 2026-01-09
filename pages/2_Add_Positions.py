@@ -1,6 +1,6 @@
 import streamlit as st
-from app.database import add_position
-from app.auth import get_role
+from database import add_position
+from auth import get_role
 
 st.title("➕ Add Position")
 

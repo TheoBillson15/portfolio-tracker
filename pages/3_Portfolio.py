@@ -1,7 +1,7 @@
 import streamlit as st
 import yfinance as yf
 import pandas as pd
-from app.database import get_positions
+from database import get_positions
 
 st.title("📁 Portfolio")
 
