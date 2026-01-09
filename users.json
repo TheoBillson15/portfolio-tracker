@@ -1,14 +1,14 @@
 {
   "admin": {
-    "password": "fbi67", 
+    "password": "a7c8f3d9e1b4...", 
     "role": "admin"
   },
   "theo": {
-    "password": "pineapple342", 
+    "password": "b91f0e12c4d3...", 
     "role": "user"
   },
   "guest": {
-    "password": "guest123", 
+    "password": "c8e4d1a0f2e9...", 
     "role": "viewer"
   }
 }
