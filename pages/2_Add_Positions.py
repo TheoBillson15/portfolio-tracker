@@ -1,3 +1,8 @@
+from components.sidebar import render_sidebar
+
+page = render_sidebar()
+
+
 import streamlit as st
 from database import add_position
 from auth import get_role

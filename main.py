@@ -11,17 +11,17 @@ def logout():
     st.session_state["logged_out_message"] = True
     st.rerun()
 
-
 # -------------------------
 # INITIAL SESSION STATE
 # -------------------------
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
+
 if "username" not in st.session_state:
     st.session_state.username = None
+
 if "role" not in st.session_state:
     st.session_state.role = None
-
 
 # -------------------------
 # LOGIN SCREEN
@@ -79,43 +79,5 @@ if not st.session_state.logged_in:
     st.markdown("</div>", unsafe_allow_html=True)
     st.stop()
 
-
-# -------------------------
-# SIDEBAR ALWAYS RENDERS FIRST
-# -------------------------
-role = get_role(st.session_state.username)
-st.session_state.role = role
-
-st.sidebar.title("📁 Navigation")
-st.sidebar.write(f"Logged in as **{st.session_state.username}** ({role})")
-st.sidebar.write("---")
-
-# Build navigation list
-pages = ["Dashboard", "Add Position", "Portfolio"]
-if role == "admin":
-    pages.append("Admin Panel")
-
-# Sidebar navigation
-page = st.sidebar.radio("Go to:", pages)
-
-st.sidebar.write("---")
-
-# Logout button at bottom
-if st.sidebar.button("🚪 Logout"):
-    logout()
-
-
-# -------------------------
-# PAGE ROUTING (AFTER SIDEBAR)
-# -------------------------
-if page == "Dashboard":
-    st.switch_page("pages/1_Dashboard.py")
-
-elif page == "Add Position":
-    st.switch_page("pages/2_Add_Position.py")
-
-elif page == "Portfolio":
-    st.switch_page("pages/3_Portfolio.py")
-
-elif page == "Admin Panel":
-    st.switch_page("pages/4_Admin.py")
+# If logged in, redirect to dashboard
+st.switch_page("pages/1_Dashboard.py")

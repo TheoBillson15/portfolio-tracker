@@ -1,3 +1,8 @@
+from components.sidebar import render_sidebar
+
+page = render_sidebar()
+
+
 import streamlit as st
 import yfinance as yf
 import pandas as pd

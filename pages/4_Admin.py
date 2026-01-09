@@ -1,3 +1,8 @@
+from components.sidebar import render_sidebar
+
+page = render_sidebar()
+
+
 import streamlit as st
 from auth import add_user, delete_user, load_users, get_role
 
