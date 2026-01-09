@@ -2,9 +2,8 @@ import streamlit as st
 from auth import get_role
 
 def render_sidebar():
-    # Protect pages
     if "logged_in" not in st.session_state or not st.session_state.logged_in:
-        st.switch_page("Home.py")
+        st.switch_page("main")
 
     role = get_role(st.session_state.username)
 
@@ -12,7 +11,6 @@ def render_sidebar():
     st.sidebar.write(f"Logged in as **{st.session_state.username}** ({role})")
     st.sidebar.write("---")
 
-    # Build navigation list
     pages = ["Dashboard", "Add Position", "Portfolio"]
     if role == "admin":
         pages.append("Admin Panel")
@@ -24,6 +22,6 @@ def render_sidebar():
     if st.sidebar.button("🚪 Logout"):
         st.session_state.clear()
         st.session_state["logged_out_message"] = True
-        st.switch_page("Home.py")
+        st.switch_page("main")
 
     return page
