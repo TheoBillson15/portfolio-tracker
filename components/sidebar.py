@@ -26,6 +26,6 @@ def render_sidebar():
     if st.sidebar.button("🚪 Logout"):
         st.session_state.clear()
         st.session_state["logged_out_message"] = True
-        st.switch_page("main")   # ← THIS IS THE FIX
+        st.switch_page("Home")  # ← this now works because 0_Home.py exists
 
     return page
