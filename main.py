@@ -7,21 +7,18 @@ st.set_page_config(page_title="Portfolio Tracker", page_icon="📈", layout="wid
 # LOGOUT FUNCTION
 # -------------------------
 def logout():
-    """Clear all session state and return to login screen."""
     st.session_state.clear()
     st.session_state["logged_out_message"] = True
     st.rerun()
 
 
 # -------------------------
-# INITIALIZE SESSION STATE
+# INITIAL SESSION STATE
 # -------------------------
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
-
 if "username" not in st.session_state:
     st.session_state.username = None
-
 if "role" not in st.session_state:
     st.session_state.role = None
 
@@ -31,7 +28,6 @@ if "role" not in st.session_state:
 # -------------------------
 if not st.session_state.logged_in:
 
-    # Show logout confirmation if triggered
     if st.session_state.get("logged_out_message"):
         st.success("You have been logged out.")
         del st.session_state["logged_out_message"]
@@ -85,36 +81,32 @@ if not st.session_state.logged_in:
 
 
 # -------------------------
-# SIDEBAR (role + navigation)
+# SIDEBAR ALWAYS RENDERS FIRST
 # -------------------------
 role = get_role(st.session_state.username)
 st.session_state.role = role
 
 st.sidebar.title("📁 Navigation")
 st.sidebar.write(f"Logged in as **{st.session_state.username}** ({role})")
-
 st.sidebar.write("---")
 
-# Build navigation list safely
+# Build navigation list
 pages = ["Dashboard", "Add Position", "Portfolio"]
 if role == "admin":
     pages.append("Admin Panel")
 
-# Navigation radio
+# Sidebar navigation
 page = st.sidebar.radio("Go to:", pages)
 
 st.sidebar.write("---")
 
-# FORCE logout button to bottom of sidebar
-st.sidebar.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
-logout_clicked = st.sidebar.button("🚪 Logout")
-
-if logout_clicked:
+# Logout button at bottom
+if st.sidebar.button("🚪 Logout"):
     logout()
 
 
 # -------------------------
-# PAGE ROUTING
+# PAGE ROUTING (AFTER SIDEBAR)
 # -------------------------
 if page == "Dashboard":
     st.switch_page("pages/1_Dashboard.py")
