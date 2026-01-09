@@ -1,3 +1,10 @@
+from auth import add_user
+
+add_user("admin", "fbi67", "admin")
+add_user("theo", "pineapple342", "user")
+add_user("guest", "guest123", "viewer")
+
+
 import streamlit as st
 from auth import authenticate, get_role
 import streamlit as st
